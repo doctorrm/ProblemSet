@@ -1,8 +1,5 @@
 package leetcode;
 
-import java.util.ArrayList;
-import java.util.LinkedList;
-
 /**
  * You are given two non-empty linked lists representing two non-negative
  * integers. The digits are stored in reverse order and each of their nodes
@@ -14,40 +11,60 @@ import java.util.LinkedList;
  * Input: (2 -> 4 -> 3) + (5 -> 6 -> 4) Output: 7 -> 0 -> 8
  * 
  * @Author doctorrm
- * @Time 2017-09-10 ÉÏÎç12:04:56
+ * @Time 2017-09-10 ä¸Šåˆ12:04:56
  */
 public class AddTwoNumbers {
 
-	public static void main(String[] args) {
-
-		LinkedList<Integer> linkedList = new LinkedList<Integer>();
-		linkedList.add(3);
-		linkedList.add(7);
-		linkedList.add(1);
-		LinkedList<Integer> linkedList2 = new LinkedList<Integer>();
-		linkedList2.add(4);
-		linkedList2.add(6);
-		System.out.println(addTwoNumbers(linkedList, linkedList2));
-
-	}
-
-	public static Integer addTwoNumbers(LinkedList<Integer> list1, LinkedList<Integer> list2) {
-		ArrayList<Integer> array1 = new ArrayList<Integer>(list1);
-		String array1Str = "";
-		int array1Int = 0;
-		ArrayList<Integer> array2 = new ArrayList<Integer>(list2);
-		String array2Str = "";
-		int array2Int = 0;
-		for (int i = array1.size() - 1; i > -1; i--) {
-			array1Str = array1Str + array1.get(i);
-			array1Int = Integer.parseInt(array1Str);
+	public static void main(String[] args) throws Exception {
+		ListNode listNode1=new ListNode(1);
+		ListNode listNode2=new ListNode(3);listNode1.next=listNode2;				
+		ListNode listNode3=new ListNode(6);
+		ListNode result=addTwoNumbers(listNode1, listNode3);
+		while(result!=null){
+			System.out.print(result.val);
+			result=result.next;
 		}
-
-		for (int j = array2.size() - 1; j > -1; j--) {
-			array2Str = array2Str + array2.get(j);
-			array2Int = Integer.parseInt(array2Str);
-		}
-		return (array1Int + array2Int);
+		
+		/*ListNode l1=new ListNode(3);
+		ListNode l2=l1;
+				l2.val=9;
+		System.out.println(l1.val);//9,SO magic!  Answer:Two instances,one memery of val;
+		*/
+		
+		/*String aString="first memory";
+		String bString=aString;
+		bString="another memory";
+		System.out.println(bString+aString);*/
+		
 	}
+	 public static ListNode addTwoNumbers(ListNode l1, ListNode l2) {
+		    ListNode dummyHead = new ListNode(0);
+		    ListNode p = l1, q = l2, curr = dummyHead;//assgin,two instances,One memory!That's the key!	  
+		    int carry = 0;
+		    while (p != null || q != null) {
+		        int x = (p != null) ? p.val : 0;//consider when one of the list ends first.
+		        int y = (q != null) ? q.val : 0;
+		        int sum = carry + x + y;//0 at the begining,satisty the reverse linked list.
+		        carry = sum / 10;
+		        curr.next = new ListNode(sum % 10);
+		        curr = curr.next;
+		        if (p != null) p = p.next;
+		        if (q != null) q = q.next;
+		    }
+		    if (carry > 0) {//carry==1
+		        curr.next = new ListNode(carry);
+		    }		    
+		    //System.out.println(curr.equals(dummyHead));//false
+		    //System.out.println(curr==dummyHead);//false
+		    //but curr and dummyHead refer to the same memory address.
+		    return dummyHead.next;
+		 }
+}
 
+//Definition for singly-linked list.
+class ListNode {
+	int val;//single value of node
+	ListNode next;//instance of this class
+	ListNode(int x) { 
+		val = x; }
 }
